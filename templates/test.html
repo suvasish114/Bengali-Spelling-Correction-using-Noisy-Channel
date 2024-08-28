@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <style>
+        div{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <form action="{{ url_for('test') }}" method="post">
+        <input type="text" name="inputsection">
+        <!-- <div contenteditable="true">
+            <p >text goes here</p>
+        </div> -->
+        <input type="button" name="submit" value="submit">
+    </form>
+</body>
+</html>

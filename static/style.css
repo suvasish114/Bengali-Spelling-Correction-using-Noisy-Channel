@@ -1,0 +1,88 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+.input-text-section{
+    width: 100%;
+    height: 60vh;
+    border-radius: 5px;
+    padding: 10px;
+    border: 2px solid rgb(160, 160, 160);
+}
+#loading{
+    visibility: hidden;
+}
+
+
+img{
+    width: 25px;
+    display: inline-block;
+}
+.wrong{
+    padding: 2px;
+    border-bottom: 2px solid red;
+    background-color: rgba(255, 0, 0, 0.123);
+}
+#output{
+    color: black;
+    width: 100%;
+    height: 60vh;
+    border-radius: 5px;
+    padding: 10px;
+    border: 2px solid rgb(160, 160, 160);
+}
+.suggestions{
+    overflow: scroll; 
+    /* overflow-y: scroll; */
+    height: 80vh;
+    width: 100%; 
+    margin: 0 auto;
+    scroll-behavior: smooth;
+    /* white-space: nowrap;  */
+}
+.suggestions::-webkit-scrollbar { 
+    display: none;
+}
+.card{
+    border: 2px solid gray;
+    border-radius: 5px;
+    width: 100%;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+.card-title{
+    padding: 1rem;
+    border-bottom: 2px solid lightgray;
+}
+.card-body{
+    padding: 1rem;
+    padding-top: 1rem;
+}
+.badge{
+    font-size: 1rem;
+    color: black;
+    border-radius: 5px;
+    padding: 5px;
+    font-weight: normal;
+}
+.output-items{
+    background-color: lightblue;
+    border-radius: 5px;
+    margin: 3px;
+    color: black;
+    border: unset;
+}
+.badge-green{
+    background-color: lightgreen;
+    border: unset;
+}
+a{
+    color: black;
+    text-decoration: unset;
+}
+#output-buttons .bi{
+    background-color: lightgray;
+    border-radius: 5px;
+    padding: 4px;
+    font-size: 1.2rem;
+    margin: 0 2px;
+    cursor: pointer;
+}
