@@ -41,7 +41,7 @@ python3 run.py
 
 After running the above snippet, your console should generate a localhost Id along with a port number (looks alike 127.0.0.1:5000). Go to your browser, and browse the URL. If all of the above instructions successfully executed, you should see web output as below screenshot
 
-![Demo](/assets/screenshot.jpeg)
+![Demo](/assets/screenshort.png)
 
 ### License
 
