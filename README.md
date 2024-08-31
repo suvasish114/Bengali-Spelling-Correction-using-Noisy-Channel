@@ -1,6 +1,6 @@
 ## Bengali Spelling Correction using Noisy Channel
 
-A web based application for Bengali spelling correction using Noisy Channel method. The documentation and presentation for this repository can be found [here]().
+A web based application for Bengali spelling correction using Noisy Channel method. The documentation and presentation for this repository can be found [here](https://drive.google.com/drive/folders/1W4yaNBHlyTEfLKFzW4ihRn8riIOeuHIN?usp=drive_link).
 
 ### Pre Requirements
 
