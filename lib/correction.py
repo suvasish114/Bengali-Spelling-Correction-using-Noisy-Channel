@@ -212,9 +212,10 @@ class NoisyChannel:
         n_grams = ngrams(nltk.word_tokenize(sentence), n)
         return [grams for grams in n_grams]
     
-    def get_lm_prob(self, sent):
-        return 10**kenlm_model.score(self.remove_punc(sent))
-
+    def get_lm_prob(self, sent, n):
+        seq = [sent.split(" ")] if len(sent.split(" ")) < n else self.extract_ngrams(sent, n)
+        scores = [10**kenlm_model.score(self.remove_punc(" ".join(a))) for a in seq]
+        return np.prod(scores)
 
 class Correction:
     def __init__(self):
@@ -258,38 +259,48 @@ class Correction:
         for word in self.noisychannel.remove_punc(sent).strip().split(" "):   # iterate through each words
             candidates.append(self.candidate.find_valid_candidates(word.strip(), med))
         return candidates
-
-    def beam_search(self, prev_words, original_word, candidates, stack_size):
-        probs = {}
-        for prev_word in prev_words:
+    
+    def beam_search(self, sentence, allcandidates, stack_size):
+        probs = [""]
+        for i in range(len(sentence)):
+            temp = {}
+            word = sentence[i]
+            candidates = allcandidates[i]
             for candidate in candidates:
-                channel_prob = 0.95             # alpha
-                if candidate != original_word:
-                    channel_prob = self.noisychannel.get_channel_probability(original_word, candidate)
+                channel_prob = 0.95 # alpha
+                if candidate != word:
+                    channel_prob = self.noisychannel.get_channel_probability(word, candidate)
                 prior_prob = self.noisychannel.prior_prob(candidate)
                 noisy_channel_prob = prior_prob * channel_prob
-                lm_prob = self.noisychannel.get_lm_prob(prev_word+" "+candidate)
-                probs[candidate] = noisy_channel_prob * lm_prob
-        probs = dict(sorted(probs.items(), key=lambda x: x[1], reverse=True))
-        with open('log.txt', 'a') as file:
-            for key, val in probs.items():      # log
-                file.write(f"{key}: {val}\n")
-            file.write("=="*20)
-            file.write("\n\n")
-        return list(probs)[:stack_size]
 
+                for key in probs:
+                    sent = key+" "+candidate
+                    lm_prob = self.noisychannel.get_lm_prob(sent.strip(), 2)   # convert into 2gram and 3gram
+                    temp[sent] = noisy_channel_prob * lm_prob
+                    # temp[sent] = lm_prob
+            temp = dict(sorted(temp.items(), key=lambda x: x[1], reverse=True))
+            probs = [key for key,_ in temp.items()][:stack_size]
+            with open("log.txt", "a") as file:
+                for key, val in temp.items():
+                    file.write(f"{key} = {val} \n")
+                file.write("-"*20)
+        return probs
 
     def rectify_sentence(self, sentence, stack_size):
         list_of_candidates = self.candidate_generator(sentence, 1)
         tokens = word_tokenize(sentence)
-        cache, probs = list(), [""]
-        for i in range(len(list_of_candidates)):
-            probs = self.beam_search(probs, tokens[i], list_of_candidates[i], stack_size)
-            print(probs)
-            if tokens[i] != probs[0]:
-                cache.append(probs) # for suggestion found
+        res = self.beam_search(tokens, list_of_candidates, stack_size)
+        test = res[0].strip().split(" ")
+        cache = list()
+        for i in range(len(tokens)):
+            temp = list()   # ordered collection
+            if test[i].strip() == tokens[i].strip():
+                temp = None
             else:
-                cache.append(None)  # no suggestion found
+                for j in range(len(res)):
+                    if res[j].strip().split(" ")[i].strip() not in temp:
+                        temp.append(res[j].strip().split(" ")[i].strip())
+            cache.append(temp)
         return cache
 
     def correct_text(self, paragraph):
